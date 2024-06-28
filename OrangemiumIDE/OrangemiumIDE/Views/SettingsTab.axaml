@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="OrangemiumIDE.Views.SettingsTab">
+    <TabControl>
+      <TabControl.Items>
+        <TabItem Header="General">
+          <ScrollViewer>
+            <StackPanel>
+              <CheckBox IsChecked="true" Name="fac">Enable fallback autocomplete</CheckBox>
+              <CheckBox IsChecked="true" Name="sln">Show Line Numbers</CheckBox>
+            </StackPanel>  
+          </ScrollViewer>
+          
+        </TabItem>
+        <TabItem Header="Themes">
+          <ScrollViewer>
+            <StackPanel>
+              <Label FontWeight="Bold">Icon Pack</Label>
+              <TextBlock TextWrapping="WrapWithOverflow">Enter directory of your icon pack. IDE will automatically select light/dark. Needs restart</TextBlock>
+              <TextBox Name="thmtb" Watermark="Please enter one..."></TextBox>
+            </StackPanel>
+          </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Extensions">
+          <DockPanel>
+              <ScrollViewer>
+                <StackPanel Name="exc"></StackPanel>  
+              </ScrollViewer>
+          </DockPanel>
+        </TabItem>  
+      </TabControl.Items>  
+    </TabControl>
+</UserControl>

@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:OrangemiumIDE.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="OrangemiumIDE.Views.MainView"
+             xmlns:views="clr-namespace:OrangemiumIDE.Views"
+			 x:DataType="vm:MainViewModel"
+			 >
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+	<Panel>
+		
+		<ListBox Opacity="0.8"></ListBox>
+		<DockPanel>
+			<Menu DockPanel.Dock="Top">
+				<MenuItem Header="File">
+					<MenuItem Header="Open" Name="of"></MenuItem>
+					<MenuItem Header="Save" Name="sf"></MenuItem>
+					<MenuItem Header="Save As..." Name="sfa"></MenuItem>
+					<MenuItem Header="Languages" Name="langs">
+						
+					</MenuItem>
+					<MenuItem Header="Themes" Name="thms">
+
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Settings" Name="st"></MenuItem>
+					<MenuItem Header="Welcome Page" Name="wcp"></MenuItem>
+					<Separator/>
+					<MenuItem Header="Quit" Name="quit"></MenuItem>
+				</MenuItem>
+				<MenuItem Header="Edit" Name="edt">
+					<MenuItem Header="Undo" Name="und"></MenuItem>
+					<MenuItem Header="Redo" Name="red"></MenuItem>
+					<!--<Separator></Separator>
+					<MenuItem Header="Find And Replace..." Name="fm"></MenuItem>-->
+				</MenuItem>
+				<MenuItem Header="View" Name="vv">
+					<CheckBox Name="ww">Word Wrap</CheckBox>
+				</MenuItem>
+				<MenuItem Header="Window" Name="wm">
+					<MenuItem Header="New Tab" Name="nt"></MenuItem>
+					<MenuItem Header="Close This Tab" Name="cct"></MenuItem>
+					<Separator/>
+					<MenuItem Header="Open new split" Name="ons"></MenuItem>
+					<Separator/>
+					<MenuItem Header="New Window" Name="nw"></MenuItem>
+					<MenuItem Header="Windows..." Name="wins"></MenuItem>
+				</MenuItem>
+			</Menu>
+			<Panel Name="statusbar" DockPanel.Dock="Bottom">
+				<ListBox></ListBox>
+				<DockPanel LastChildFill="false">
+					<StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+						<Label Name="statuslbl">Ready</Label>
+					</StackPanel>
+					<StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+						<Label Name="codetype">?</Label>
+						<Button Name="bx" Padding="0">Bottom Pane</Button>
+					</StackPanel>
+				</DockPanel>
+			</Panel>
+			<Panel DockPanel.Dock="Left" Width="330" Name="sidearea">
+				<!--<ListBox Opacity="0.8"></ListBox>-->
+				<DockPanel>
+					<Panel Width="50" DockPanel.Dock="Left" Name="vvar">
+						<ListBox></ListBox>
+						<StackPanel Width="50" Name="vvaricons">
+							
+						</StackPanel>
+					</Panel>
+					
+					<Panel>
+						<views:folderview Name="fv"></views:folderview>
+						<views:debugsidebarview Name="debgsd"></views:debugsidebarview>
+					</Panel>
+				</DockPanel>
+				
+			</Panel>
+			
+			<views:carea Name="btmarea" DockPanel.Dock="Bottom" IsVisible="false"></views:carea>
+			
+			
+			<Grid Name="tg"></Grid>
+		</DockPanel>
+	</Panel>
+</UserControl>

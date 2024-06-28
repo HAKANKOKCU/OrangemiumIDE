@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="OrangemiumIDE.Views.debugoptsli">
+  <Button Name="btn" HorizontalAlignment="Stretch" Background="Transparent">
+    <Button.ContextMenu>
+      <ContextMenu>
+        <MenuItem Header="Run Without Compiling" Name="rwc"></MenuItem>
+        <MenuItem Header="Run Without Debugging" Name="rwd"></MenuItem>
+      </ContextMenu>  
+    </Button.ContextMenu>
+    <DockPanel>
+      <Button Name="startdbg" Width="20" Height="20" Padding="0"></Button>
+      <Label Name="dbgname"></Label>
+    </DockPanel>
+  </Button>
+</UserControl>

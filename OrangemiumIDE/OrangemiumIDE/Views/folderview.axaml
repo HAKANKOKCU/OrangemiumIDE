@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="280" d:DesignHeight="450"
+             x:Class="OrangemiumIDE.Views.folderview">
+	<UserControl.ContextMenu>
+		<ContextMenu>
+			<MenuItem Header="Add Folder..." Name="af"></MenuItem>
+			<MenuItem Header="Add this file's parent folder" Name="atfp"></MenuItem>
+		</ContextMenu>
+	</UserControl.ContextMenu>
+	<DockPanel>
+		<Label DockPanel.Dock="Top">Folder Explorer</Label>
+		<TreeView Name="tex" AutoScrollToSelectedItem="true"></TreeView>
+	</DockPanel>
+</UserControl>

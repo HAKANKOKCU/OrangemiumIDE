@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="OrangemiumIDE.Views.extensionli">
+  <Button HorizontalAlignment="Stretch" Name="btn" Background="Transparent">
+    <DockPanel>
+      <Image VerticalAlignment="Center" Margin="5" Height="40" Width="40" Name="ico"></Image>
+      <CheckBox Name="chenable" DockPanel.Dock="Right"></CheckBox>
+      <StackPanel Orientation="Vertical">
+        <Label Name="namelbl" FontSize="16" Padding="5">Name</Label>
+        <TextBlock Name="shortdesc" Padding="5"></TextBlock>
+        <Label Opacity="0.6" Name="verlbl" Padding="5"></Label>
+      </StackPanel>
+    </DockPanel>
+  </Button>
+</UserControl>
