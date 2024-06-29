@@ -1,4 +1,11 @@
 # OrangemiumIDE *(WIP)*
+![](https://img.shields.io/bitbucket/pr/HAKANKOKCU/OrangemiumIDE?style=for-the-badge)
+![](https://img.shields.io/bitbucket/issues/HAKANKOKCU/OrangemiumIDE?style=for-the-badge)
+![](https://img.shields.io/github/v/release/HAKANKOKCU/OrangemiumIDE?style=for-the-badge)
+![](https://img.shields.io/github/commit-activity/m/HAKANKOKCU/OrangemiumIDE?style=for-the-badge)
+![](https://img.shields.io/github/license/HAKANKOKCU/OrangemiumIDE?style=for-the-badge)
+
+
 An **Work In Progress**(Expect bugs and missing stuff) code editor, bulit with AvaloniaUI (C#)
 
 ![resim](https://github.com/HAKANKOKCU/OrangemiumIDE/assets/103432992/db0ed8e8-0be9-46a6-a8e0-8593e8eb5c01)
