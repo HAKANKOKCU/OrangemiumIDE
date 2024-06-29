@@ -13,3 +13,5 @@ First you have to compile the IDE, then you should download "/IconTheme" folder 
 To compile the IDE (which is located at "/OrangemiumIDE" at this repo), download "/OrangemiumIDE", then go to "./OrangemiumIDE.Desktop", then you can use dotnet to build the project: `dotnet build ./OrangemiumIDE.Desktop.csproj` 
 # Extensions
 This does support extensions, but I didn't write documentation about it yet.
+# Contributing
+Please check [Contributing.md](https://github.com/HAKANKOKCU/OrangemiumIDE/blob/main/docs/CONTRIBUTING.md)
