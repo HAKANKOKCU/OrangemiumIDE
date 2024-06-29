@@ -12,7 +12,15 @@ An **Work In Progress**(Expect bugs and missing stuff) code editor, bulit with A
 ![resim](https://github.com/HAKANKOKCU/OrangemiumIDE/assets/103432992/2fa1805f-ff76-4f47-8a41-db2c45a97368)
 ![resim](https://github.com/HAKANKOKCU/OrangemiumIDE/assets/103432992/e719ad2b-815d-4dbc-8aa1-630a83d29c20)
 
-
+# What's the difference?
+ | Thing | OrangemiumIDE | VS Code |
+ | - | - | - |
+ | Background stuff | Doesn't run extensions at background when not used | Still runs them |
+ | Rendering | AvaloniaUI | Chromium/ElectronJS |
+ | Backend | DotNet core C# | Node.JS |
+ | Extenisons Support | not at all | yes
+ 
+ 
 
 # Get Started
 First you have to compile the IDE, then you should download "/IconTheme" folder then go to "File > Settings > Themes > Icon Pack" then put the folder's path into the textbox, then restart the IDE
