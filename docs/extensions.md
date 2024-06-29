@@ -24,8 +24,7 @@ Extensions are located at `%appdata%/OrangemiumIDE/extensions`, if you add or re
         "Args": "/c %FILE% (args that you need)"
       }
       "Compiler": { "Comment2": "OPTIONAL, as an example, dotnet compiler will be shown. I know its not realted but I wanted to keep this short",
-        "Global (platform)": 
-        {
+        "Global (platform)": {
           "Executable":"dotnet",
           "Args": "build %FILE% /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary /p:Configuration=Debug /p:Platform=\"AnyCPU\""
         }
@@ -43,5 +42,8 @@ Extensions are located at `%appdata%/OrangemiumIDE/extensions`, if you add or re
 ```
 ### Example extensions
 [batchExtension.zip](https://github.com/user-attachments/files/16039101/batchExtension.zip)
+[OrangemiumIDEBatchTools.zip](https://github.com/user-attachments/files/16039821/OrangemiumIDEBatchTools.zip)
+
+
 [testExtension.zip](https://github.com/user-attachments/files/16039102/testExtension.zip)
 
