@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="OrangemiumIDE.Views.commandBar">
+  <Border CornerRadius="25" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="64" Width="400" ClipToBounds="True">
+    <Grid>
+      <ListBox Opacity="0.9"></ListBox>
+      <DockPanel Margin="2">
+        <Border CornerRadius="25" DockPanel.Dock="Top">
+          <Panel>
+            <Image Height="50" Width="50" Name="ico" ZIndex="5" HorizontalAlignment="Left"></Image>
+            <TextBox Watermark="Type an command..." VerticalContentAlignment="Center" Padding="50 0 0 0" Name="ctb" CornerRadius="25" BorderThickness="0" Background="Transparent"></TextBox>
+          </Panel>  
+        </Border>
+        <ScrollViewer>
+          <StackPanel Orientation="Vertical" Name="results">
+            <Label HorizontalAlignment="Center">Type to start.</Label>
+          </StackPanel>
+        </ScrollViewer>
+        
+      </DockPanel>
+    </Grid>
+  </Border>
+</UserControl>

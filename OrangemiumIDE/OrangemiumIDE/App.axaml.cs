@@ -97,8 +97,11 @@ public partial class App : Application
         }
 
         public void restart() {
+            try {process.CancelOutputRead();process.CancelErrorRead();}catch{}
             process.Kill();
             process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
         }
 
         public void disconnect() {
@@ -529,6 +532,27 @@ public partial class App : Application
         
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    public static void OpenBrowser(string url)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            url = url.Replace("&", "^&");
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            Process.Start("xdg-open", url);
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            Process.Start("open", url);
+        }
+        else
+        {
+			//...
+		}
     }
 
     public static async Task<List<MyCompletionData>> getSuggestions(tabcont tabcontent) {

@@ -28,6 +28,7 @@ using Avalonia.Threading;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using AvaloniaEdit.Rendering;
+using System.Text.RegularExpressions;
 namespace OrangemiumIDE.Views;
 
 public partial class MainWindow : Window
@@ -37,15 +38,111 @@ public partial class MainWindow : Window
     EditorTabControl? currenttc = null;
     RegistryOptions ro = new RegistryOptions(ThemeName.DarkPlus);
     private CompletionWindow cv;
-    ArrayList alfolders = new();
+    List<string> alfolders = new();
     Dictionary<string, TreeViewItem> fa = new();
 	
     bool controlpressed = false;
+    bool shiftpressed = false;
 	
+    commandBar cmdbar = new();
+    List<string> allfiles = new();
 	
     public MainWindow(String[]? args)
     {
         InitializeComponent();
+        //shownotification("Welcome","Test Notification!");
+        ((Panel)mv.Content).Children.Add(cmdbar);
+        cmdbar.IsVisible = false;
+
+        cmdbar.ctb.KeyDown += (a,e) => {
+            if (e.Key == Avalonia.Input.Key.Enter) {
+                try {
+                    var parts = Regex.Matches(cmdbar.ctb.Text, @"[\""].+?[\""]|[^ ]+")
+                        .Cast<Match>()
+                        .Select(m => m.Value)
+                        .ToList();
+                    if (parts.Count > 1) {
+                        if (parts[0] == "newfile") {
+                            string path = parts[1].Replace("\"","");
+                            File.Create(path).Close();
+                            if (twviews.ContainsKey(Path.GetDirectoryName(path).ToLower())) {
+                                inittitem(twviews[Path.GetDirectoryName(path).ToLower()],Path.GetDirectoryName(path).ToLower());
+                            }
+                        }
+                        if (parts[0] == "newfolder") {
+                            string path = parts[1].Replace("\"","");
+                            Directory.CreateDirectory(path);
+                            if (twviews.ContainsKey(Path.GetDirectoryName(path).ToLower())) {
+                                inittitem(twviews[Path.GetDirectoryName(path).ToLower()],Path.GetDirectoryName(path).ToLower());
+                            }
+                        }
+                        cmdbar.IsVisible = false;
+                        cmdbar.ctb.Text = "";
+                        cmdbar.results.Children.Clear();
+                    }
+                }catch (Exception ex) {
+                    shownotification("Command error!",ex.ToString());
+                }
+            }
+        };
+
+        cmdbar.ctb.TextChanged += (e,a) => {
+            cmdbar.results.Children.Clear();
+            var parts = Regex.Matches(cmdbar.ctb.Text, @"[\""].+?[\""]|[^ ]+")
+                .Cast<Match>()
+                .Select(m => m.Value)
+                .ToList();
+            if (parts.Count > 1) {
+                Label ilbl = new() {HorizontalAlignment = HorizontalAlignment.Center};
+                cmdbar.results.Children.Add(ilbl);
+                if (parts[0] == "newfile") {
+                    ilbl.Content = "0: Path";
+                }
+                if (parts[0] == "newfolder") {
+                    ilbl.Content = "0: Path";
+                }
+            }else {
+                int c = 0;
+                
+                foreach (EditorTabControl tc in alltc)
+                foreach (TabItem i in tc.tabControl.Items) {
+                    if (i.Content is tabcont) {
+                        string nm = ((Label)((StackPanel)i.Header).Children[1]).Content.ToString();
+                        if (nm.ToLower().Contains(cmdbar.ctb.Text.ToLower())) {
+                            addcmdbaritem(nm).Click += (e,a) => {
+                                tc.tabControl.SelectedItem = i;
+                                tc.tabControl.Focus();
+                            };
+                        }
+                    }
+                }
+                foreach (string file in allfiles) {
+                    if (file.ToLower().Contains(cmdbar.ctb.Text.ToLower())) {
+                        addcmdbaritem(file).Click += (e,a) => {
+                            if (controlpressed) {
+                                openfile(newtab(),file);
+                            }else {
+                                openfile(selectedtab,file);
+                            }
+                        };
+                        c += 1;
+                        if (c == 11) break;
+                    }
+                }
+            }
+        };
+
+        mv.mdock.GotFocus += (e,a) => {
+            cmdbar.IsVisible = false;
+            cmdbar.ctb.Text = "";
+            cmdbar.results.Children.Clear();
+        };
+
+        mv.mdock.PointerPressed += (e,a) => {
+            cmdbar.IsVisible = false;
+            cmdbar.ctb.Text = "";
+            cmdbar.results.Children.Clear();
+        };
 
         wins.Add(this);
         Closed += (e,a) => {
@@ -122,11 +219,40 @@ public partial class MainWindow : Window
                     tabcont tb = (tabcont)(selectedtab).Content;
                     savefile(tb);
                 }
+                if (shiftpressed) {
+                    if (e.Key == Avalonia.Input.Key.C)
+                    {
+                        cmdbar.IsVisible = true;
+                        cmdbar.ctb.Focus();
+                        allfiles.Clear();
+                        
+                        foreach (string folder in alfolders) {
+                            try {
+                                var fs = Directory.GetFiles(folder,"*",SearchOption.AllDirectories);
+                                foreach (string f in fs) {
+                                    allfiles.Add(f);
+                                }
+                            }catch {}
+                        }
+                    }
+                }
             }
             
+            if (e.Key == Avalonia.Input.Key.Escape) {
+                if (cmdbar.IsVisible) {
+                    cmdbar.IsVisible = false;
+                    cmdbar.ctb.Text = "";
+                    cmdbar.results.Children.Clear();
+                }
+            }
+
             if (e.Key == Avalonia.Input.Key.LeftCtrl)
             {
                 controlpressed = true;
+            }
+            if (e.Key == Avalonia.Input.Key.LeftShift)
+            {
+                shiftpressed = true;
             }
         };
         KeyUp += (s, e) =>
@@ -135,6 +261,10 @@ public partial class MainWindow : Window
             {
                 controlpressed = false;
             }
+            if (e.Key == Avalonia.Input.Key.LeftShift)
+            {
+                shiftpressed = false;
+            }
         };
         mv.nw.Click += async void (e, a) => {
             new MainWindow([]).Show();
@@ -142,7 +272,7 @@ public partial class MainWindow : Window
         mv.fv.af.Click += async void (e, a) => {
             var dialog = new OpenFolderDialog();
             var dirpath = await dialog.ShowAsync(this);
-            openfolder(dirpath);
+            if (dirpath != null) openfolder(dirpath);
         };
         mv.fv.atfp.Click += (e, a) => {
             try
@@ -177,6 +307,8 @@ public partial class MainWindow : Window
             tab.editor.Redo();
         };
        
+
+        cmdbar.ico.Source = geticon("chevronright");
 		ToggleButton filb = addsidebaritem("filecopy","Files",mv.fv);
         mv.vvaricons.Children.Add(filb);
         ToggleButton dbg = addsidebaritem("bug","Debugging",mv.debgsd);
@@ -184,7 +316,7 @@ public partial class MainWindow : Window
         selectsidebaritem(0,filb);
 
 		bool closin = false;
-		Closing += async (s, e) => { //TODO, BUGGY
+		Closing += (s, e) => { //TODO, BUGGY
             try {
                 savedata();
                 foreach (EditorTabControl tc in alltc)
@@ -202,11 +334,25 @@ public partial class MainWindow : Window
                                     
                                     if (r == MessageBox.MessageBoxResult.Yes) {
                                         Dispatcher.UIThread.Post(() => {
-                                            foreach (EditorTabControl tc in alltc)
-                                            foreach (TabItem i in tc.tabControl.Items) {
-                                                if (i.Content is tabcont) {
-                                                    tabcont abb = (tabcont)i.Content;
-                                                    savefile(abb);
+                                            int itmleng = 0;
+                                            foreach (EditorTabControl tc in alltc) {
+                                                itmleng += tc.tabControl.Items.Count;
+                                                foreach (TabItem i in tc.tabControl.Items) {
+                                                    if (i.Content is tabcont) {
+                                                        tabcont abb = (tabcont)i.Content;
+                                                        savefile(abb).ContinueWith((Task<bool> c) => {
+                                                            if (c.IsCompletedSuccessfully) {
+                                                                if (c.Result == true) {
+                                                                    itmleng -= 1;
+                                                                    if (itmleng == 0) {
+                                                                        closin = true;
+                                                                        e.Cancel = false;
+                                                                        Close();
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                    }
                                                 }
                                             }
                                             //closin = true;
@@ -272,8 +418,8 @@ public partial class MainWindow : Window
                 }
             }
          };
-//KeyValuePair<string, Dictionary<string, object>> tn in themes
-//Dictionary<string, object> tn in themes.Values
+        //KeyValuePair<string, Dictionary<string, object>> tn in themes
+        //Dictionary<string, object> tn in themes.Values
         foreach (KeyValuePair<string, Dictionary<string, object>> t in themes)
         {
 			var tn = t.Value;
@@ -361,6 +507,28 @@ public partial class MainWindow : Window
         {
             openfilefromdialog();
         };
+    }
+
+    notif shownotification(string title, string content) {
+        notif notification = new();
+        notification.tbar.Content = title;
+        notification.content.Text = content;
+        mv.notifs.Children.Add(notification);
+        notification.cls.Click += (e,a) => {
+            mv.notifs.Children.Remove(notification);
+        };
+        return notification;
+    }
+
+    Button addcmdbaritem(string content) {
+        Button btn = new() {HorizontalAlignment = HorizontalAlignment.Stretch, Content = content, Background = Brushes.Transparent};
+        cmdbar.results.Children.Add(btn);
+        btn.Click += (e,a) => {
+            cmdbar.IsVisible = false;
+            cmdbar.ctb.Text = "";
+            cmdbar.results.Children.Clear();
+        };
+        return btn;
     }
 
     async void openfilefromdialog() {
@@ -779,6 +947,7 @@ public partial class MainWindow : Window
         foreach (string dirpath in alfolders)
         {
             TreeViewItem mtvi = new() { Header = Path.GetFileName(dirpath) };
+            twviews[dirpath.ToLower()] = mtvi;
             ContextMenu cm = new();
             MenuItem mirem = new() { Header = "Remove Folder" };
             mirem.Click += (e, a) => {
@@ -792,12 +961,14 @@ public partial class MainWindow : Window
             mv.fv.tex.Items.Add(mtvi);
         }
     }
+
+    Dictionary<string,TreeViewItem> twviews = new();
 	
     void inittitem(TreeViewItem tvi, string path)
     {
         try
         {
-            
+            tvi.Items.Clear();
             string[] folders = Directory.GetDirectories(path);
             foreach (string folder in folders)
             {
@@ -809,6 +980,7 @@ public partial class MainWindow : Window
                 nmlbl.Content = Path.GetFileName(folder);
                 icon.Source = geticon("folder");
                 TreeViewItem titem = new() { Header = hdr };
+                twviews[folder.ToLower()] = titem;
                 TreeViewItem ttem = new();
                 titem.Items.Add(ttem);
                 bool isfirst = true;
@@ -824,6 +996,13 @@ public partial class MainWindow : Window
 					refocuscurrentfile();
                 };
                 tvi.Items.Add(titem);
+                ContextMenu fc = new();
+                MenuItem cpp = new() {Header = "Copy Path"};
+                cpp.Click += (e,a) => {
+                    Clipboard.SetTextAsync(folder);
+                };
+                fc.Items.Add(cpp);
+                titem.ContextMenu = fc;
             }
             string[] files = Directory.GetFiles(path);
             foreach (string file in files)
@@ -836,6 +1015,7 @@ public partial class MainWindow : Window
                 nmlbl.Content = Path.GetFileName(file);
                 icon.Source = geticon("file");
                 TreeViewItem titem = new() { Header = hdr };
+                twviews[file.ToLower()] = titem;
                 fa[file] = titem;
 				titem.PointerReleased += (e, a) => { openfile(selectedtab, file); };
                 ContextMenu fc = new();
@@ -870,7 +1050,7 @@ public partial class MainWindow : Window
                 tvi.Items.Add(titem);
             }
         }catch (Exception e) { 
-            
+            shownotification("Failled to load folder", e.ToString());
         }
     }
 
@@ -1002,6 +1182,12 @@ public partial class MainWindow : Window
         SettingsTab tabcontent = new();
         tab.Content = tabcontent;
         
+        tabcontent.gprof.Click += (e,a) => {
+            OpenBrowser("https://github.com/HAKANKOKCU");
+        };
+        tabcontent.pgithub.Click += (e,a) => {
+            OpenBrowser("https://github.com/HAKANKOKCU/OrangemiumIDE");
+        };
 		
         StackPanel hstack = new() { Orientation = Avalonia.Layout.Orientation.Horizontal };
 		
@@ -1048,7 +1234,13 @@ public partial class MainWindow : Window
                 if (li.chenable.IsChecked == true) {
                     ((JArray)settings["extensions"]).Add(ext.Key);
                 }else {
-                    ((JArray)settings["extensions"]).Remove(ext.Key);
+                    foreach (JToken extn in (JArray)settings["extensions"]) {
+                        if (extn.ToString() == ext.Key) {
+                            ((JArray)settings["extensions"]).Remove(extn);
+                            break;
+                        }
+                    }
+                    
                 }
             };
         }

@@ -30,6 +30,15 @@
                 <StackPanel Name="exc"></StackPanel>  
               </ScrollViewer>
           </DockPanel>
+        </TabItem>
+        <TabItem Header="About">
+          <ScrollViewer>
+            <StackPanel>
+              <Label FontSize="25">OrangemiumIDE</Label>
+              <Label><StackPanel Orientation="Horizontal"><TextBlock>By </TextBlock><Button Background="Transparent" Padding="0" Name="gprof">HAKANKOKCU</Button></StackPanel></Label>
+              <Button Name="pgithub">See project in GitHub</Button>
+            </StackPanel>
+          </ScrollViewer>
         </TabItem>  
       </TabControl.Items>  
     </TabControl>

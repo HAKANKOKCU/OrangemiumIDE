@@ -16,7 +16,7 @@
 	<Panel>
 		
 		<ListBox Opacity="0.8"></ListBox>
-		<DockPanel>
+		<DockPanel Name="mdock">
 			<Menu DockPanel.Dock="Top">
 				<MenuItem Header="File">
 					<MenuItem Header="Open" Name="of"></MenuItem>
@@ -88,5 +88,10 @@
 			
 			<Grid Name="tg"></Grid>
 		</DockPanel>
+		<ScrollViewer HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
+			<StackPanel Orientation="Vertical" Name="notifs">
+
+			</StackPanel>	
+		</ScrollViewer>
 	</Panel>
 </UserControl>
