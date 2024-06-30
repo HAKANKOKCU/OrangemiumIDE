@@ -26,6 +26,12 @@ An **Work In Progress**(Expect bugs and missing stuff) code editor, bulit with A
 First you have to compile the IDE, then you should download "/IconTheme" folder then go to "File > Settings > Themes > Icon Pack" then put the folder's path into the textbox, then restart the IDE
 ## Compiling
 To compile the IDE (which is located at "/OrangemiumIDE" at this repo), download "/OrangemiumIDE", then go to "./OrangemiumIDE.Desktop", then you can use dotnet to build the project: `dotnet build ./OrangemiumIDE.Desktop.csproj` 
+# Shortcuts
+ | Key | Action |
+ |-|-|
+ | <kbd>Ctrl</kbd> + <kbd>O</kbd> | Open File |
+ | <kbd>Ctrl</kbd> + <kbd>T</kbd> | New tab |
+ | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> | Command Bar |
 # Extensions
 See [Extensions](https://github.com/HAKANKOKCU/OrangemiumIDE/blob/main/docs/extensions.md)
 # Contributing
