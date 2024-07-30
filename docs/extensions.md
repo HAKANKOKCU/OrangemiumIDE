@@ -1,5 +1,5 @@
 # Extensions
-Extensions are located at `%appdata%/OrangemiumIDE/extensions`, if you add or remove an extension, IDE needs to be restarted.
+Extensions are located at `%appdata%/OrangemiumIDE/extensions` and they have to be enabled at settings, if you add or remove an extension, IDE needs to be restarted.
 ## Creating an extension
 * First you should create an folder for your extension, lets call it "testExtension". The location would be `%appdata%/OrangemiumIDE/extensions/testExtension`.
 * Second, you should create 1 file: "extension.json", and make an icon.
